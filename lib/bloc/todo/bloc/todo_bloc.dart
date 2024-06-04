@@ -21,6 +21,13 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
       await _databaseService.createNewTodo(todoTitle: event.todoTitle);
       add(LoadTodosEvent());
     });
+
+    on<UpdateTodoEvent>((event, emit) async {
+      await _databaseService.updateTodo(
+          todoTitle: event.todoTitle, todoId: event.todoId);
+      add(LoadTodosEvent());
+    });
+
     on<DeleteTodoEvent>((event, emit) async {
       await _databaseService.deleteTodo(todoId: event.todoId);
       add(LoadTodosEvent());

@@ -34,6 +34,19 @@ class DatabaseService {
     });
   }
 
+  Future<void> updateTodo(
+      {required String todoTitle, required String todoId}) async {
+    final Isar dbInstance = await _db;
+    Todo? todo =
+        await dbInstance.todos.filter().todoIdEqualTo(todoId).findFirst();
+    todo?.todoTitle = todoTitle;
+    if (todo != null) {
+      await dbInstance.writeTxn(() async {
+        await dbInstance.todos.put(todo);
+      });
+    }
+  }
+
   Future<void> deleteTodo({required String todoId}) async {
     final Isar dbInstance = await _db;
     final Todo? todo =
